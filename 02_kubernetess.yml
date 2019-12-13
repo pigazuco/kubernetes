@@ -1,0 +1,141 @@
+---
+  - name: INSTALL Kubernetes
+    hosts: all-kube
+    gather_facts: no
+    vars_prompt:
+      - name: "kubernetes_version"
+        prompt: "Kubernetes version (last 1.16.2)?"
+        default: "1.15.5"
+        private: no
+    tasks:
+      - name: Adding kuber.repo
+        get_url:
+          url: http://registry.mad.lab/kuber.repo
+          dest: /etc/yum.repos.d/kubernetes.repo
+      - name: /etc/sysctl.d/k8s.confv6
+        lineinfile:
+          path: /etc/sysctl.d/k8s.conf
+          line: net.bridge.bridge-nf-call-ip6tables = 1
+          create: yes
+      - name: /etc/sysctl.d/k8s.confv4
+        lineinfile:
+          path: /etc/sysctl.d/k8s.conf
+          line: net.bridge.bridge-nf-call-iptables = 1
+      - name: netfiler & swapoff -a
+        command: "{{item}}"
+        with_items:
+          - modprobe br_netfilter
+          - swapoff -a
+      - name: disable swap fstab
+        lineinfile:
+          path: /etc/fstab
+          regexp: swap
+          state: absent
+      - sysctl:
+          name: net.ipv4.ip_forward
+          value: 1
+          sysctl_set: yes
+          state: present
+          reload: yes
+      - name: Install Kubernetes Packages
+        shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
+
+  - name: CLUSTER INIT
+    hosts: controller
+    vars_prompt:
+      - name: "cluster_init"
+        prompt: "Init kubernetes cluster [y/n]?"
+        default: "y"
+        private: no
+      - name: "pod_network_cidr"
+        prompt: "pod-network-cidr (calico->192.168.0.0/16)?"
+        default: "1.2.0.1/16"
+        private: no   
+    tasks:
+      - meta: end_play
+        when: (cluster_init!="y")
+ #     - name: exit
+ #       fail: msg="Nothing to do"
+ #       when: (cluster_init!="y")
+      - name: Allow FW rules
+        command: "{{item}}"
+        with_items:
+          - firewall-cmd --permanent --add-port=6443/tcp
+          - firewall-cmd --permanent --add-port=2379-2380/tcp
+          - firewall-cmd --permanent --add-port=10250/tcp
+          - firewall-cmd --permanent --add-port=10251/tcp
+          - firewall-cmd --permanent --add-port=10252/tcp
+          - firewall-cmd --permanent --add-port=10255/tcp
+          - firewall-cmd --permanent --add-port=30000-32767/tcp
+          - firewall-cmd --permanent --add-port=6783-6784/udp
+          - firewall-cmd --reload
+      - name: Inicia cluster <kubeadm init>
+        command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.1.4.10"
+        when: (cluster_init=="y")
+      - name: Variables entorno
+        command: "{{item}}"
+        with_items:
+          - mkdir -p /root/.kube
+          - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+          - chown 0:0 /root/.kube/config
+          - kubectl taint nodes --all node-role.kubernetes.io/master-
+      - name: Download acc-provision
+        get_url:
+          url: http://registry.mad.lab/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+          dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+      - name: Install Provisioning
+        command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+      - name: Download aci-containers-config_KBNT2_AIBARRIO.yaml
+        get_url:
+          url: http://registry.mad.lab/aci-containers-config_KBNT2_AIBARRIO.yaml
+          dest: /root/aci-containers-config_KBNT2_AIBARRIO.yaml
+      - name: Provision ACI infra
+        command: acc-provision -c /root/aci-containers-config_KBNT2_AIBARRIO.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+      - name: Get token
+        shell: kubeadm token create --print-join-command
+        register: kubeadm_token
+      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
+
+  - name: MOVE JOIN COMMAND to LOCALHOST
+    hosts: localhost
+    tasks:
+      - name: copy to localhost
+        command: cp /tmp/join_cluster.sh /var/www/html/
+
+  - name: ADD NODES
+    hosts: nodes
+    tasks:
+      - name: Allow FW rules
+        command: "{{item}}"
+        with_items:
+          - firewall-cmd --permanent --add-port=6443/tcp
+          - firewall-cmd --permanent --add-port=2379-2380/tcp
+          - firewall-cmd --permanent --add-port=10250/tcp
+          - firewall-cmd --permanent --add-port=10251/tcp
+          - firewall-cmd --permanent --add-port=10252/tcp
+          - firewall-cmd --permanent --add-port=10255/tcp
+          - firewall-cmd --permanent --add-port=30000-32767/tcp
+          - firewall-cmd --permanent --add-port=6783-6784/udp
+          - firewall-cmd --reload
+      - name: get join command
+        get_url:
+          url: http://registry.mad.lab/join_cluster.sh
+          dest: /tmp/join_cluster.sh
+      - name: make it exec
+        file:
+          path: /tmp/join_cluster.sh
+          mode: 0700
+      - name: runn join
+        script: /tmp/join_cluster.sh
+        register: output
+  - name: SYSTEMCT KUBER
+    hosts: all-kube
+    tasks:
+      - name: systemctl enable --now kubelet
+        command: systemctl enable --now kubelet
+  - name: CLEAN UP
+    hosts: localhost
+    tasks:
+      - name: remove joing cluster command
+        command: rm -rf /tmp/join_cluster.sh /var/www/html/join_cluster.sh
+  

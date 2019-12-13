@@ -1,0 +1,20 @@
+---
+- name: Rollback
+  hosts: srv1.mad.lab
+  gather_facts: no
+  vars_prompt:
+    - name: "rollback"
+      prompt: "01-empty, 02 docker installed, 03-cluster init(before cni), 04-cisco-cni-ok"
+      default: "02"
+      private: no
+  tasks:
+    - name: rollback
+      command: "{{item}}"
+      with_items:
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-master
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-node1
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-node2
+        - virsh start kb-master
+        - virsh start kb-node1
+        - virsh start kb-node2
+

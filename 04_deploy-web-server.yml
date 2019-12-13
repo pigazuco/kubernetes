@@ -1,0 +1,20 @@
+---
+- name: DEPLOY WEB-SERVER
+  hosts: controller
+  gather_facts: no
+  vars_prompt:
+    - name: "namespace"
+      prompt: "Namespace"
+      private: no
+  tasks:
+    - name: Download tomcat-deployment.yaml
+      get_url:
+        url: http://registry.mad.lab/web-server.yaml
+        dest: /tmp/web-server.yaml
+    - name: Deploy project
+      command: "{{item}}"
+      with_items:
+        - kubectl create ns {{namespace}} 
+        - kubectl -n {{namespace}} apply -f /tmp/web-server.yaml
+        - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
+

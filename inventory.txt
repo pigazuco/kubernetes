@@ -1,0 +1,16 @@
+localhost
+
+[all-kube]
+kb-master.mad.lab
+kb-node1.mad.lab
+kb-node2.mad.lab
+
+[controller]
+kb-master.mad.lab
+
+[nodes]
+kb-node1.mad.lab
+kb-node2.mad.lab
+
+[srv1]
+srv1.mad.lab
