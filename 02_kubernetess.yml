@@ -39,6 +39,20 @@
           reload: yes
       - name: Install Kubernetes Packages
         shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
+      - name: Allow FW rules
+      command: "{{item}}"
+      with_items:
+        - firewall-cmd --permanent --add-port=6443/tcp
+        - firewall-cmd --permanent --add-port=2379-2380/tcp
+        - firewall-cmd --permanent --add-port=10250/tcp
+        - firewall-cmd --permanent --add-port=10251/tcp
+        - firewall-cmd --permanent --add-port=10252/tcp
+        - firewall-cmd --permanent --add-port=10255/tcp
+        - firewall-cmd --permanent --add-port=30000-32767/tcp
+        - firewall-cmd --permanent --add-port=6783/tcp
+        - firewall-cmd --permanent --add-port=6783-6784/udp
+        - firewall-cmd --permanent --add-port=6783/tcp
+        - firewall-cmd --reload
   - name: CLUSTER INIT
     hosts: controller
     vars_prompt:
