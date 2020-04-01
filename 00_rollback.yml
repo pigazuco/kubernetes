@@ -11,10 +11,12 @@
     - name: rollback
       command: "{{item}}"
       with_items:
-        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-master
-        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-node1
-        - virsh snapshot-revert --snapshotname {{rollback}} --domain kb-node2
-        - virsh start kb-master
-        - virsh start kb-node1
-        - virsh start kb-node2
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kube-1
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kube-2
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kube-3
+        - virsh snapshot-revert --snapshotname {{rollback}} --domain kube-4
+        - virsh start kube-1
+        - virsh start kube-2
+        - virsh start kube-3
+        - virsh start kube-4
 
