@@ -77,7 +77,8 @@
           url: http://registry.mad.lab/kube/aci-containers-config.yaml
           dest: /root/aci-containers.yaml
       - name: Provision ACI infra
-        command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761      - meta: end_play
+        command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+      - meta: end_play
         when: (cluster_init!="y")
       - name: Inicia cluster <kubeadm init>
         command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.2.128.11"
@@ -89,7 +90,6 @@
           - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
           - chown 0:0 /root/.kube/config
           - kubectl taint nodes --all node-role.kubernetes.io/master-
-
       - name: Get token
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
