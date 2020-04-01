@@ -53,7 +53,6 @@
           - firewall-cmd --permanent --add-port=6783-6784/udp
           - firewall-cmd --permanent --add-port=6783/tcp
           - firewall-cmd --reload
-      - meta: end_play
   - name: CLUSTER INIT
     hosts: kb-node1.mad.lab
 #    vars_prompt:
@@ -91,4 +90,3 @@
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
 #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
-      - meta: end_play
