@@ -1,0 +1,45 @@
+
+
+
+  - name: MOVE JOIN COMMAND to LOCALHOST
+  hosts: localhost
+  tasks:
+    - name: copy to localhost
+      command: cp /tmp/join_cluster.sh /var/www/html/
+- name: ADD NODES
+  hosts: nodes
+  tasks:
+    - name: Allow FW rules
+      command: "{{item}}"
+      with_items:
+        - firewall-cmd --permanent --add-port=6443/tcp
+        - firewall-cmd --permanent --add-port=2379-2380/tcp
+        - firewall-cmd --permanent --add-port=10250/tcp
+        - firewall-cmd --permanent --add-port=10251/tcp
+        - firewall-cmd --permanent --add-port=10252/tcp
+        - firewall-cmd --permanent --add-port=10255/tcp
+        - firewall-cmd --permanent --add-port=30000-32767/tcp
+        - firewall-cmd --permanent --add-port=6783-6784/udp
+        - firewall-cmd --permanent --add-port=6783/tcp
+        - firewall-cmd --reload
+    - name: get join command
+      get_url:
+        url: http://registry.mad.lab/join_cluster.sh
+        dest: /tmp/join_cluster.sh
+    - name: make it exec
+      file:
+        path: /tmp/join_cluster.sh
+        mode: 0700
+    - name: runn join
+      script: /tmp/join_cluster.sh
+      register: output
+- name: SYSTEMCT KUBER
+  hosts: all-kube
+  tasks:
+    - name: systemctl enable --now kubelet
+      command: systemctl enable --now kubelet
+- name: CLEAN UP
+  hosts: localhost
+  tasks:
+    - name: remove joing cluster command
+      command: rm -rf /tmp/join_cluster.sh /var/www/html/join_cluster.sh
