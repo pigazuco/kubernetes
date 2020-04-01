@@ -90,7 +90,7 @@
       - name: Get token
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
-      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
+#      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
       - meta: end_play
 
 
