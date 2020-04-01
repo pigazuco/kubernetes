@@ -94,13 +94,11 @@
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
       - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
-
   - name: MOVE JOIN COMMAND to LOCALHOST
     hosts: localhost
     tasks:
       - name: copy to localhost
         command: cp /tmp/join_cluster.sh /var/www/html/
-
   - name: ADD NODES
     hosts: nodes
     tasks:
