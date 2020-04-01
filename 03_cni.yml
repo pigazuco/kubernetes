@@ -2,20 +2,7 @@
 - name: DERPLOYING CISCO CNI
   hosts: kb-node1.mad.lab
   gather_facts: no
-  vars_prompt:
-    - name: "cni_plugin"
-      prompt: "CNI plugin [cisco,calico,weavenet]?"
-      default: "cisco"
-      private: no
   tasks:
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
-      when: (cni_plugin == "cisco")
-    - name: Applying Calico CNI
-      command: kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
-      when: (cni_plugin == "calico")
-    - name: Applying Wave Net CNI
-      command: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d n)"
-      when: (cni_plugin == "weavenet")
-
 
