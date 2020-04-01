@@ -51,7 +51,7 @@
         state: directory
     - name: get daemon.json
       get_url:
-        url: http://registry.mad.lab/daemon.json
+        url: http://registry.mad.lab/kube/daemon.json
         dest: /etc/docker/daemon.json
     - name: add directory
       command: mkdir -p /etc/systemd/system/docker.service.d
