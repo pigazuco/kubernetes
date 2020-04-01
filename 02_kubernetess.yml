@@ -67,7 +67,7 @@
           - firewall-cmd --permanent --add-port=6783-6784/udp
           - firewall-cmd --reload
       - name: Inicia cluster <kubeadm init>
-        command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.1.4.10"
+        command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.2.128.11"
         when: (cluster_init=="y")
       - name: Variables entorno
         command: "{{item}}"
