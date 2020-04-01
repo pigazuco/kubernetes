@@ -53,9 +53,6 @@
     tasks:
       - meta: end_play
         when: (cluster_init!="y")
- #     - name: exit
- #       fail: msg="Nothing to do"
- #       when: (cluster_init!="y")
       - name: Allow FW rules
         command: "{{item}}"
         with_items:
@@ -80,16 +77,16 @@
           - kubectl taint nodes --all node-role.kubernetes.io/master-
       - name: Download acc-provision
         get_url:
-          url: http://registry.mad.lab/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+          url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
           dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
       - name: Install Provisioning
         command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-      - name: Download aci-containers-config_KBNT2_AIBARRIO.yaml
+      - name: Download aci-containers.yaml
         get_url:
-          url: http://registry.mad.lab/aci-containers-config_KBNT2_AIBARRIO.yaml
-          dest: /root/aci-containers-config_KBNT2_AIBARRIO.yaml
+          url: http://registry.mad.lab/kube/aci-containers.yaml
+          dest: /root/aci-containers.yaml
       - name: Provision ACI infra
-        command: acc-provision -c /root/aci-containers-config_KBNT2_AIBARRIO.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+        command: acc-provision -c /root/aci-containers.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
       - name: Get token
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
