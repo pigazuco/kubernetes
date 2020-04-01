@@ -1,5 +1,4 @@
 ---
-
 - name: INSTALL DOCKER
   hosts: all-kube
   gather_facts: no
