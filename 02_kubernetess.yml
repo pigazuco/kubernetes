@@ -66,31 +66,6 @@
         default: "1.2.192.0/22"
         private: no   
     tasks:
-      - meta: end_play
-        when: (cluster_init!="y")
-      - name: Allow FW rules
-        command: "{{item}}"
-        with_items:
-          - firewall-cmd --permanent --add-port=6443/tcp
-          - firewall-cmd --permanent --add-port=2379-2380/tcp
-          - firewall-cmd --permanent --add-port=10250/tcp
-          - firewall-cmd --permanent --add-port=10251/tcp
-          - firewall-cmd --permanent --add-port=10252/tcp
-          - firewall-cmd --permanent --add-port=10255/tcp
-          - firewall-cmd --permanent --add-port=30000-32767/tcp
-          - firewall-cmd --permanent --add-port=6783/tcp
-          - firewall-cmd --permanent --add-port=6783-6784/udp
-          - firewall-cmd --reload
-      - name: Inicia cluster <kubeadm init>
-        command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.2.128.11"
-        when: (cluster_init=="y")
-      - name: Variables entorno
-        command: "{{item}}"
-        with_items:
-          - mkdir -p /root/.kube
-          - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-          - chown 0:0 /root/.kube/config
-          - kubectl taint nodes --all node-role.kubernetes.io/master-
       - name: Download acc-provision
         get_url:
           url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
@@ -102,7 +77,19 @@
           url: http://registry.mad.lab/kube/aci-containers-config.yaml
           dest: /root/aci-containers.yaml
       - name: Provision ACI infra
-        command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+        command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761      - meta: end_play
+        when: (cluster_init!="y")
+      - name: Inicia cluster <kubeadm init>
+        command: "kubeadm init --pod-network-cidr={{pod_network_cidr}} --apiserver-advertise-address=1.2.128.11"
+        when: (cluster_init=="y")
+      - name: Variables entorno
+        command: "{{item}}"
+        with_items:
+          - mkdir -p /root/.kube
+          - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+          - chown 0:0 /root/.kube/config
+          - kubectl taint nodes --all node-role.kubernetes.io/master-
+
       - name: Get token
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
