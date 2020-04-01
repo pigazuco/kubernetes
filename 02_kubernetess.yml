@@ -5,7 +5,7 @@
     vars_prompt:
       - name: "kubernetes_version"
         prompt: "Kubernetes version (last 1.16.2)?"
-        default: "1.15.5"
+        default: "1.15.11"
         private: no
     tasks:
       - name: Adding kuber.repo
@@ -84,10 +84,10 @@
         command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
       - name: Download aci-containers.yaml
         get_url:
-          url: http://registry.mad.lab/kube/aci-containers.yaml
+          url: http://registry.mad.lab/kube/aci-containers-config.yaml
           dest: /root/aci-containers.yaml
       - name: Provision ACI infra
-        command: acc-provision -c /root/aci-containers.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+        command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
       - name: Get token
         shell: kubeadm token create --print-join-command
         register: kubeadm_token
