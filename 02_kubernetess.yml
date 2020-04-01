@@ -1,5 +1,5 @@
 ---
-  - name: INSTALL Kubernetes
+  - name: INSTALL KUBERNETES
     hosts: all-kube
     gather_facts: no
     vars_prompt:
@@ -10,7 +10,7 @@
     tasks:
       - name: Adding kuber.repo
         get_url:
-          url: http://registry.mad.lab/kuber.repo
+          url: http://registry.mad.lab/kube/kuber.repo
           dest: /etc/yum.repos.d/kubernetes.repo
       - name: /etc/sysctl.d/k8s.confv6
         lineinfile:
@@ -39,7 +39,6 @@
           reload: yes
       - name: Install Kubernetes Packages
         shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
-
   - name: CLUSTER INIT
     hosts: controller
     vars_prompt:
