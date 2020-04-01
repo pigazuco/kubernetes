@@ -10,10 +10,10 @@
       command: sed -i --follow-symlinks s/SELINUX=enforcing/SELINUX=disabled/g /etc/sysconfig/selinux
 #    - name: Disable subscription
 #      command: sed -i "s/enabled\=aa/enabled\=0/g" /etc/yum/pluginconf.d/subscription-manager.conf
-    - name: Enable local repo
-      get_url:
-        url: http://registry.mad.lab/local.repo
-        dest: /etc/yum.repos.d/local.repo
+#    - name: Enable local repo
+#      get_url:
+#        url: http://registry.mad.lab/local.repo
+#        dest: /etc/yum.repos.d/local.repo
     - name: Install Packages
       yum:
         state: present
