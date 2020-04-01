@@ -1,6 +1,6 @@
 ---
 - name: DERPLOYING CISCO CNI
-  hosts: controller
+  hosts: kb-node1.mad.lab
   gather_facts: no
   vars_prompt:
     - name: "cni_plugin"
