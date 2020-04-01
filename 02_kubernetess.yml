@@ -48,7 +48,7 @@
         private: no
       - name: "pod_network_cidr"
         prompt: "pod-network-cidr (calico->192.168.0.0/16)?"
-        default: "1.2.0.1/16"
+        default: "1.2.192.0/22"
         private: no   
     tasks:
       - meta: end_play
@@ -63,6 +63,7 @@
           - firewall-cmd --permanent --add-port=10252/tcp
           - firewall-cmd --permanent --add-port=10255/tcp
           - firewall-cmd --permanent --add-port=30000-32767/tcp
+          - firewall-cmd --permanent --add-port=6783/tcp
           - firewall-cmd --permanent --add-port=6783-6784/udp
           - firewall-cmd --reload
       - name: Inicia cluster <kubeadm init>
@@ -110,6 +111,7 @@
           - firewall-cmd --permanent --add-port=10255/tcp
           - firewall-cmd --permanent --add-port=30000-32767/tcp
           - firewall-cmd --permanent --add-port=6783-6784/udp
+          - firewall-cmd --permanent --add-port=6783/tcp
           - firewall-cmd --reload
       - name: get join command
         get_url:
