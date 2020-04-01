@@ -55,7 +55,7 @@
           - firewall-cmd --reload
       - meta: end_play
   - name: CLUSTER INIT
-    hosts: kb-node1
+    hosts: kb-node1.mad.lab
 #    vars_prompt:
 #      - name: "cluster_init"
 #        prompt: "Init kubernetes cluster [y/n]?"
