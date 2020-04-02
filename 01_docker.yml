@@ -1,5 +1,5 @@
 ---
-- name: INSTALL DOCKER
+- name: DEPLOY DOCKER
   hosts: kb-all
   gather_facts: no
   tasks:
@@ -139,7 +139,7 @@
   tasks:
     - name: systemctl enable --now kubelet
       command: systemctl enable --now kubelet
-- name: DERPLOYING CISCO CNI
+- name: DEPLOY CISCO CNI
   hosts: kb-node1.mad.lab
   gather_facts: no
   tasks:
