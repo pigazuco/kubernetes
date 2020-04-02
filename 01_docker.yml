@@ -7,12 +7,6 @@
       command: setenforce 0
     - name: Disabling SE linux permanent
       command: sed -i --follow-symlinks s/SELINUX=enforcing/SELINUX=disabled/g /etc/sysconfig/selinux
-#    - name: Disable subscription
-#      command: sed -i "s/enabled\=aa/enabled\=0/g" /etc/yum/pluginconf.d/subscription-manager.conf
-#    - name: Enable local repo
-#      get_url:
-#        url: http://registry.mad.lab/local.repo
-#        dest: /etc/yum.repos.d/local.repo
     - name: Install Packages
       yum:
         state: present
@@ -31,31 +25,31 @@
           - python-ipaddr
           - device-mapper-persistent-data
           - lvm2
-    - name: docker
+    - name: Docker igmp_max_memberships
       command: echo net.ipv4.igmp_max_memberships = 200 > /etc/sysctl.d/99-sysctl.conf
-    - name: add docker repo
+    - name: Add docker repo
       command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    - name: Install docker
+    - name: Install docker 18.06.2.ce
       yum:
         state: present
         name:
           - docker-ce-18.06.2.ce
-    - name: create folder docker
+    - name: Create /etc/docker folder
       file:
         path: /etc/docker
         state: directory
-    - name: create folder docker.service.d
+    - name: Create docker.service.d
       file:
         path: /etc/systemd/system/docker.service.d
         state: directory
-    - name: get daemon.json
+    - name: Get daemon.json
       get_url:
         url: http://registry.mad.lab/kube/daemon.json
         dest: /etc/docker/daemon.json
-    - name: add directory
+    - name: Add systemd folder
       command: mkdir -p /etc/systemd/system/docker.service.d
     - name: enable services
-      command: systemctl enable docker
+      command: Enable systemctldocker
     - name: start services
       command: systemctl start docker
 
