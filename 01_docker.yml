@@ -139,9 +139,5 @@
   tasks:
     - name: systemctl enable --now kubelet
       command: systemctl enable --now kubelet
-    - name: SYSTEMCT KUBER
-      hosts: all-kube
-      tasks:
-        - name: systemctl enable --now kubelet
-          command: systemctl enable --now kubelet
+
 
