@@ -16,9 +16,8 @@
         dest: /tmp/web-server.yaml
     - name: Deploy project
       command: "{{item}}"
-      with_items:
-        - kubectl create ns {{namespace}} 
-        - kubectl -n {{namespace}} apply -f /tmp/web-server.yaml
-        - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
-        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/web-server.yaml
+      with_items:        
+        - kubectl delete deployment web-server -n {{namespace}}
+        - kubectl delete ns {{namespace}} 
+
 
