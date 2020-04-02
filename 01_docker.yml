@@ -134,7 +134,7 @@
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
   #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
-  - name: SYSTEMCT KUBER
+- name: SYSTEMCT KUBER
   hosts: kb-all
   tasks:
     - name: systemctl enable --now kubelet
