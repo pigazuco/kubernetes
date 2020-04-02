@@ -1,0 +1,49 @@
+echo 'TYPE="Ethernet"
+BOOTPROTO="none"
+NAME="eth0"
+DEVICE="eth0"
+ONBOOT="yes"
+MTU="1600"' > /etc/sysconfig/network-scripts/ifcfg-eth0
+
+echo 'BOOTPROTO="none"
+IPV6INIT="no"
+DEVICE="eth0.105"
+NAME="eth0.105"
+ONBOOT="yes"
+IPADDR="1.2.128.11"
+PREFIX="24"
+GATEWAY="1.2.128.1"
+DNS1="1.255.0.1"
+VLAN="yes"' > /etc/sysconfig/network-scripts/ifcfg-eth0.105 
+
+echo 'TYPE=Ethernet
+PERSISTENT_DHCLIENT=1
+DHCPRELEASE=1
+DEVICE=eth0.3967
+ONBOOT=yes
+PEERDNS=yes
+BOOTPROTO=dhcp
+VLAN=yes
+ONPARENT=yes
+MTU=1600
+MACADDR=52:54:00:23:69:e8
+NM_CONTROLLED=no' > /etc/sysconfig/network-scripts/ifcfg-eth0.3967
+
+echo 'send dhcp-client-identifier 52:54:00:23:69:e8;
+request subnet-mask, domain-name, domain-name-servers, host-name;
+send host-name ka-node3.mad.lab;
+ 
+option rfc3442-classless-static-routes code 121 = array of unsigned integer 8;
+option ms-classless-static-routes code 249 = array of unsigned integer 8;
+option wpad code 252 = string;
+ 
+also request rfc3442-classless-static-routes;
+also request ms-classless-static-routes;
+also request static-routes;
+also request wpad;
+also request ntp-servers;' > /etc/dhcp/dhclient-eth0.3967.conf
+
+echo 'ADDRESS0=224.0.0.0
+NETMASK0=240.0.0.0
+GATEWAY0=0.0.0.0
+METRIC0=1000' > /etc/sysconfig/network-scripts/route-eth0.3967
