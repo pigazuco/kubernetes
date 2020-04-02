@@ -129,19 +129,23 @@
         - mkdir -p /root/.kube
         - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         - chown 0:0 /root/.kube/config
-        - kubectl taint nodes --all node-role.kubernetes.io/master-
+#        - kubectl taint nodes --all node-role.kubernetes.io/master-
     - name: Get token
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
-  #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
+ #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
   - name: SYSTEMCT KUBER
   hosts: kb-all
   tasks:
     - name: systemctl enable --now kubelet
       command: systemctl enable --now kubelet
 - name: DEPLOY CISCO CNI
-  hosts: kb-node1.mad.lab
+  hosts: kb-controller
   gather_facts: no
+  vars_prompt:
+    - name: "namespace"
+      prompt: "Kube-system deployed?"
+      private: no
   tasks:
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
