@@ -1,6 +1,6 @@
 ---
 - name: DEPLOY WEB-SERVER
-  hosts: controller
+  hosts: kb-controller
   gather_facts: no
   vars_prompt:
     - name: "namespace"
@@ -9,7 +9,7 @@
   tasks:
     - name: Download tomcat-deployment.yaml
       get_url:
-        url: http://registry.mad.lab/web-server.yaml
+        url: http://registry.mad.lab/kube/web-server.yaml
         dest: /tmp/web-server.yaml
     - name: Deploy project
       command: "{{item}}"
