@@ -18,6 +18,4 @@
       command: "{{item}}"
       with_items:        
         - kubectl delete deployment web-server -n {{namespace}}
-        - kubectl delete ns {{namespace}} 
-
-
+        - kubectl delete ns {{namespace}}
