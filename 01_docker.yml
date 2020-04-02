@@ -48,9 +48,9 @@
         dest: /etc/docker/daemon.json
     - name: Add systemd folder
       command: mkdir -p /etc/systemd/system/docker.service.d
-    - name: enable services
+    - name: enable docker service
       command: systemctl enable docker
-    - name: start services
+    - name: start docker service
       command: systemctl start docker
 - name: DEPLOY KUBERNETES
   hosts: kb-all
