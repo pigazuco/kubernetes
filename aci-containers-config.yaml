@@ -41,7 +41,7 @@ aci_config:
   #
   net_config:
     node_subnet: 1.2.128.1/24       # Subnet to use for nodes
-    pod_subnet: 1.2.192.1/22       # Subnet to use for Kubernetes
+    pod_subnet: 1.2.192.1/23       # Subnet to use for Kubernetes
                                   #   Pods/CloudFoundry containers
     #vip_subnet: 1.3.0.1/16      # Subnet to use for virtual IPs
                                   #   (CloudFoundry only)
