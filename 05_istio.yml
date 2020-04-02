@@ -1,6 +1,6 @@
 ---
 - name: INSTALL ISTIO
-  hosts: controller
+  hosts: kb-controller
   tasks:
     - name: Download
       get_url:
