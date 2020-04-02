@@ -1,0 +1,24 @@
+---
+- name: DEPLOY WEB-SERVER
+  hosts: kb-controller
+  gather_facts: no
+  vars_prompt:
+    - name: "namespace"
+      prompt: "namespace"
+      private: no
+    - name: "replicas"
+      prompt: "replicas"
+      private: no
+  tasks:
+    - name: Download tomcat-deployment.yaml
+      get_url:
+        url: http://registry.mad.lab/kube/web-server.yaml
+        dest: /tmp/web-server.yaml
+    - name: Deploy project
+      command: "{{item}}"
+      with_items:
+        - kubectl create ns {{namespace}} 
+        - kubectl -n {{namespace}} apply -f /tmp/web-server.yaml
+        - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/web-server.yaml
+
