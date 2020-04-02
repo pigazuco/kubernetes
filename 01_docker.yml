@@ -57,7 +57,7 @@
   gather_facts: no
   vars_prompt:
     - name: "kubernetes_version"
-      prompt: "Kubernetes version (default 1.15.11, 1.16.2)?"
+  #    prompt: "Kubernetes version (default 1.15.11, 1.16.2)?"
       default: "1.15.11"
       private: no
   tasks:
