@@ -106,7 +106,7 @@
         - firewall-cmd --permanent --add-port=6783-6784/udp
         - firewall-cmd --permanent --add-port=6783/tcp
         - firewall-cmd --reload
-  - name: CLUSTER INIT
+- name: CLUSTER INIT
   hosts: kb-controller
   tasks:
     - name: Download acc-provision
@@ -129,11 +129,11 @@
         - mkdir -p /root/.kube
         - cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         - chown 0:0 /root/.kube/config
-#        - kubectl taint nodes --all node-role.kubernetes.io/master-
+  #        - kubectl taint nodes --all node-role.kubernetes.io/master-
     - name: Get token
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
- #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
+  #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
   - name: SYSTEMCT KUBER
   hosts: kb-all
   tasks:
