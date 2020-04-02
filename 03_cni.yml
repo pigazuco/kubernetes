@@ -1,8 +1,0 @@
----
-- name: DERPLOYING CISCO CNI
-  hosts: kb-node1.mad.lab
-  gather_facts: no
-  tasks:
-    - name: Applying Cisco CNI
-      command: kubectl apply -f aci-containers.yaml
-
