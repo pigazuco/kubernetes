@@ -92,6 +92,8 @@
         reload: yes
     - name: Install Kubernetes Packages
       shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
+    - name: systemctl enable --now kubelet
+      command: systemctl enable --now kubelet
     - name: Allow FW rules
       command: "{{item}}"
       with_items:
@@ -134,11 +136,8 @@
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
   #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
-- name: SYSTEMCT KUBER
-  hosts: kb-all
-  tasks:
-    - name: systemctl enable --now kubelet
-      command: systemctl enable --now kubelet
+  
+
 - name: DEPLOY CISCO CNI
   hosts: kb-controller
   gather_facts: no
