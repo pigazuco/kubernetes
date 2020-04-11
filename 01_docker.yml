@@ -141,6 +141,6 @@
   gather_facts: no
   tasks:
     - pause:
-      minutes: 2
+      minutes: 5
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
