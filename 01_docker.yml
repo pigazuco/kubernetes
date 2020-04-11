@@ -55,11 +55,8 @@
 - name: DEPLOY KUBERNETES
   hosts: kb-all
   gather_facts: no
-  vars_prompt:
-    - name: "kubernetes_version"
-  #    prompt: "Kubernetes version (default 1.15.11, 1.16.2)?"
-      default: "1.15.11"
-      private: no
+  vars:
+    - kubernetes_version ="1.15.11"
   tasks:
     - name: Adding kuber.repo
       get_url:
@@ -124,8 +121,8 @@
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
     - name: Kubernetes cluster initialization
-      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
-#      command: "kubeadm init --pod-network-cidr=1.2.194.0/23 --apiserver-advertise-address=1.2.128.11 --service-cidr 25.36.0.0/24 --ignore-preflight-errors=CRI"
+#      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
+      command: "kubeadm init --pod-network-cidr=1.2.194.0/23 --apiserver-advertise-address=1.2.128.11 --service-cidr 25.36.0.0/24 --ignore-preflight-errors=CRI"
     - name: Variables entorno
       command: "{{item}}"
       with_items:
@@ -136,6 +133,8 @@
     - name: Get token
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
+    - name: Add node1 as worker
+      shell: kubectl taint nodes --all node-role.kubernetes.io/master-
   #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
 - name: DEPLOY CISCO CNI
   hosts: kb-controller
