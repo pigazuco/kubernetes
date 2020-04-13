@@ -12,13 +12,12 @@
   tasks:
     - name: Download tomcat-deployment.yaml
       get_url:
-        url: http://registry.mad.lab/kube/web-server.yaml
-        dest: /tmp/web-server.yaml
+        url: http://registry.mad.lab/kube/deployment-nginx.yaml
+        dest: /tmp/deployment-nginx.yaml
     - name: Deploy project
       command: "{{item}}"
       with_items:
-        - kubectl create ns {{namespace}} 
-        - kubectl -n {{namespace}} apply -f /tmp/web-server.yaml
+        - kubectl create ns {{namespace}}
+        - kubectl -n {{namespace}} apply -f /tmp/deployment-nginx.yaml
         - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
-        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/web-server.yaml
-
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/deployment-nginx.yaml
