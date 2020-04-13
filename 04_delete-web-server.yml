@@ -7,12 +7,8 @@
       prompt: "namespace"
       private: no
   tasks:
-    - name: Download tomcat-deployment.yaml
-      get_url:
-        url: http://registry.mad.lab/kube/web-server.yaml
-        dest: /tmp/web-server.yaml
     - name: Deploy project
       command: "{{item}}"
-      with_items:        
+      with_items:
         - kubectl delete deployment web-server -n {{namespace}}
         - kubectl delete ns {{namespace}}
