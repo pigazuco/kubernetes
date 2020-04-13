@@ -3,10 +3,10 @@
   hosts: kb-all
   gather_facts: no
   tasks:
-    - name: Disabling SE linux
-      command: setenforce 0
-    - name: Disabling SE linux permanent
-      command: sed -i --follow-symlinks s/SELINUX=enforcing/SELINUX=disabled/g /etc/sysconfig/selinux
+#    - name: Disabling SE linux
+#      command: setenforce 0
+#    - name: Disabling SE linux permanent
+#      command: sed -i --follow-symlinks s/SELINUX=enforcing/SELINUX=disabled/g /etc/sysconfig/selinux
     - name: Install Packages
       yum:
         state: present
@@ -144,3 +144,11 @@
       minutes: 5
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
+- name: GET SOME DEPLOYMENTS
+  hosts: kb-controller
+  gather_facts: no
+  tasks:
+    - name: Centos deployment
+      get_url:
+        url: http://registry.mad.lab/kube/deployment-centos.yml
+        dest: /root/deployment-centos.yml
