@@ -91,6 +91,8 @@
       shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
     - name: systemctl enable kubelet
       command: systemctl enable --now kubelet
+    - name: systemctl start kubelet
+      command: systemctl start kubelet
     - name: Allow FW rules
       command: "{{item}}"
       with_items:
@@ -121,8 +123,8 @@
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
     - name: Kubernetes cluster initialization
-#      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
-      command: "kubeadm init --pod-network-cidr 1.2.194.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24 --ignore-preflight-errors=CRI"
+      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
+#      command: "kubeadm init --pod-network-cidr 1.2.194.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24 --ignore-preflight-errors=CRI"
     - name: Variables entorno
       command: "{{item}}"
       with_items:
