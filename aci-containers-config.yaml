@@ -7,7 +7,7 @@ aci_config:
   apic_hosts:                   # List of APIC hosts to connect for APIC API
   - 10.10.10.59
   vmm_domain:                   # Kubernetes container domain configuration
-    mcast_fabric: 225.11.22.33
+    mcast_fabric: 225.11.11.11
     encap_type: vxlan           # Encap mode: vxlan or vlan
     mcast_range:                # Every opflex VMM must use a distinct range
       start: 225.21.1.1
