@@ -56,7 +56,7 @@
   hosts: kb-all
   gather_facts: no
   vars:
-    kubernetes_version: ="1.15.11"
+    kubernetes_version: "1.15.11"
   tasks:
     - name: Adding kuber.repo
       get_url:
