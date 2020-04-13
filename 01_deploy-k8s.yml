@@ -133,17 +133,17 @@
     - name: Get token
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
-    - name: Add node1 as worker
-      shell: kubectl taint nodes --all node-role.kubernetes.io/master-
+  #  - name: Add node1 as worker
+  #    shell: kubectl taint nodes --all node-role.kubernetes.io/master-
   #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
-- name: DEPLOY CISCO CNI
-  hosts: kb-controller
-  gather_facts: no
-  tasks:
-    - pause:
-      minutes: 5
-    - name: Applying Cisco CNI
-      command: kubectl apply -f aci-containers.yaml
+#- name: DEPLOY CISCO CNI
+#  hosts: kb-controller
+#  gather_facts: no
+#  tasks:
+#    - pause:
+#      minutes: 5
+#    - name: Applying Cisco CNI
+#      command: kubectl apply -f aci-containers.yaml
 - name: GET SOME DEPLOYMENTS
   hosts: kb-controller
   gather_facts: no
