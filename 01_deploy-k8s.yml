@@ -89,7 +89,7 @@
         reload: yes
     - name: Install Kubernetes Packages
       shell: "yum install -y kubelet-{{kubernetes_version}} kubeadm-{{kubernetes_version}} kubectl-{{kubernetes_version}} --disableexcludes=kubernetes"
-    - name: systemctl enable --now kubelet
+    - name: systemctl enable kubelet
       command: systemctl enable --now kubelet
     - name: Allow FW rules
       command: "{{item}}"
@@ -116,7 +116,7 @@
       command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
     - name: Copy aci-containers-config.yaml
       copy:
-        src: /root/aci-containers-config.yaml
+        src: ./aci-containers-config.yaml
         dest: /root/aci-containers-config.yaml
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
