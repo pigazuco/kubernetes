@@ -56,7 +56,7 @@
   hosts: kb-all
   gather_facts: no
   vars:
-    kubernetes_version: "1.15.11"
+    kubernetes_version: "1.15.6" # 1.15.11
   tasks:
     - name: Adding kuber.repo
       get_url:
@@ -114,9 +114,9 @@
         dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
     - name: Install Provisioning
       command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-    - name: Download aci-containers-config.yaml
-      get_url:
-        url: http://registry.mad.lab/kube/aci-containers-config.yaml
+    - name: Copy aci-containers-config.yaml
+      copy:
+        src: ./aci-containers-config.yaml
         dest: /root/aci-containers-config.yaml
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
