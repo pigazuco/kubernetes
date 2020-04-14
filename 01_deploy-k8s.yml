@@ -137,8 +137,8 @@
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
     - debug: msg="{{ kubeadm_token.stdout }}"
-  #  - name: Add node1 as worker
-  #    shell: kubectl taint nodes --all node-role.kubernetes.io/master-
+    - name: Add node1 as worker
+      shell: kubectl taint nodes --all node-role.kubernetes.io/master-
   #      - local_action: copy content={{ kubeadm_token.stdout }} dest=/tmp/join_cluster.sh
 #- name: DEPLOY CISCO CNI
 #  hosts: kb-controller
