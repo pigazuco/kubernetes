@@ -56,7 +56,7 @@
   hosts: kb-all
   gather_facts: no
   vars:
-    kubernetes_version: "1.15.6" # 1.15.11
+    kubernetes_version: "1.15.11" # 1.15.11
   tasks:
     - name: Adding kuber.repo
       get_url:
@@ -120,6 +120,8 @@
       copy:
         src: /root/kubernetes/aci-containers-config.yaml
         dest: /root/aci-containers-config.yaml
+    - pause:
+        minutes: 5
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
     - name: Kubernetes cluster initialization
