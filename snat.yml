@@ -1,0 +1,10 @@
+apiVersion: aci.snat/v1
+kind: SnatPolicy
+metadata:
+  name: my-snat-name
+spec:
+  selector:
+    namespace: testns
+    labels:      my-snat-label: backend-apps
+  snatIp:
+    - 10.20.30.40
