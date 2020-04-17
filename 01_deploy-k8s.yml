@@ -120,8 +120,6 @@
       copy:
         src: /root/kubernetes/aci-containers-config.yaml
         dest: /root/aci-containers-config.yaml
-    - pause:
-        minutes: 5
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
     - name: Kubernetes cluster initialization
