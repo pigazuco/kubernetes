@@ -5,22 +5,16 @@ metadata:
 spec:
   selector:
     namespace: testns
-    labels:      my-snat-label: backend-apps
+    labels:
+      my-snat-label: backend-apps
   snatIp:
     - 10.20.30.40
-
 apiVersion: v1
-kind: Podmetadata:
-  name: busybox
+kind: Namespace
+metadata:
   labels:
     my-snat-label: backend-apps
-    namespace: Default
+  name: aitor
 spec:
-  containers:
-    - image: busybox
-    command:
-      - sleep
-      - "3600"
-    imagePullPolicy: IfNotPresent
-    name: busybox
-    restartPolicy: Always
+  finalizers:
+    - kubernetes
