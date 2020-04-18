@@ -145,6 +145,12 @@
       minutes: 5
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
+    - name: Copy snat.yml
+      copy:
+        src: /root/kubernetes/snat.yml
+        dest: /root/snat.yml
+    - name: Applying Snat
+      command: kubectl apply -f snat.yml
 - name: GET SOME DEPLOYMENTS
   hosts: kb-controller
   gather_facts: no
