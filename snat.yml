@@ -1,10 +1,10 @@
 apiVersion: aci.snat/v1
 kind: SnatPolicy
 metadata:
-  name: my-snat-name
+  name: snatpolicy
 spec:
   selector:
-    namespace: testns
+    namespace: default
     labels:
       my-snat-label: backend-apps
   snatIp:
@@ -14,7 +14,7 @@ kind: Namespace
 metadata:
   labels:
     my-snat-label: backend-apps
-  name: aitor
+  name: default
 spec:
   finalizers:
     - kubernetes
