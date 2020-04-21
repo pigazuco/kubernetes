@@ -106,6 +106,7 @@
         - firewall-cmd --permanent --add-port=6783/tcp
         - firewall-cmd --permanent --add-port=6783-6784/udp
         - firewall-cmd --permanent --add-port=6783/tcp
+        - firewall-cmd --permanent --set-target=ACCEPT
         - firewall-cmd --reload
 - name: CLUSTER INIT
   hosts: kb-controller
@@ -123,9 +124,9 @@
     - name: Provision ACI infra
       command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
     - name: Kubernetes cluster initialization
-#      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
+      command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
 #      command: "kubeadm init --pod-network-cidr 1.2.192.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24"
-      command: "kubeadm init --pod-network-cidr 1.2.192.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24 --ignore-preflight-errors=CRI"
+#      command: "kubeadm init --pod-network-cidr 1.2.192.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24 --ignore-preflight-errors=CRI"
     - name: Variables entorno
       command: "{{item}}"
       with_items:
@@ -151,11 +152,3 @@
         dest: /root/snat.yml
     - name: Applying Snat
       command: kubectl apply -f snat.yml
-- name: GET SOME DEPLOYMENTS
-  hosts: kb-controller
-  gather_facts: no
-  tasks:
-    - name: Centos deployment
-      get_url:
-        url: http://registry.mad.lab/kube/deployment-centos.yml
-        dest: /root/deployment-centos.yml
