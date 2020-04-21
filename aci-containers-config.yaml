@@ -48,7 +48,7 @@ net_config:
   node_svc_subnet: 1.2.131.1/24  # Subnet to use for service graph
   kubeapi_vlan: 105            # The VLAN used by the physdom for nodes
                                 #   (Kubernetes only)
-  service_vlan: 106            # The VLAN used by LoadBalancer services
+  service_vlan: 196            # The VLAN used by LoadBalancer services
   infra_vlan: 3967              # The VLAN used by ACI infra
   #interface_mtu: 1600          # min = 1280 for ipv6, max = 8900 for VXLAN
   #service_monitor_interval: 5  # IPSLA interval probe time for PBR tracking
