@@ -45,7 +45,6 @@
           - pyOpenSSL
           - python-jinja2
           - python-requests
-          - python-setuptools
           - PyYAML
           - python-ipaddr
           - device-mapper-persistent-data
@@ -153,7 +152,7 @@
       shell: kubeadm token create --print-join-command
       register: kubeadm_token
     - debug: msg="{{ kubeadm_token.stdout }}"
-- name: DEPLOY CISCO CNI
+- name: DEPLOY CISCO CNI and SNAT
   hosts: kb-controller
   gather_facts: no
   tasks:
