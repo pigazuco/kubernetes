@@ -6,6 +6,7 @@
     - name: "aci_password"
       prompt: "Enter ACI password"
       private: yes
+      register: aci_password
   tasks:
     - name: Disabling SE linux
       command: setenforce 0
