@@ -1,0 +1,14 @@
+---
+- name: DEPLOY CENTOS
+  hosts: kb-controller
+  gather_facts: no
+  tasks:
+    - name: Copy yaml
+      copy:
+        src: /root/kubernetes/deploy-centos.yml
+        dest: /root/deploy-centos.yml
+    - name: Deploying
+      command: "{{item}}"
+      with_items:
+#        - kubectl create ns {{namespace}}
+        - kubectl delete -f /root/deploy-centos.yml
