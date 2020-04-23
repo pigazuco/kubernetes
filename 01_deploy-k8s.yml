@@ -11,6 +11,11 @@
       get_url:
         url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
         dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+    - name: Install Packages setuptools
+      yum:
+        state: present
+        name:
+          - python-setuptools
     - name: Install Provisioning
       command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
     - name: Copy aci-containers-config.yaml
