@@ -8,6 +8,10 @@
       private: yes
       register: aci_password
   tasks:
+    - name: Make vars persistant
+      set_fact:
+        aws_region: "{{aci_password}}"
+  tasks:
     - name: Disabling SE linux
       command: setenforce 0
     - name: Disabling SE linux permanent
