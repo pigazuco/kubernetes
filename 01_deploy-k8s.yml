@@ -8,9 +8,11 @@
       private: yes
       register: aci_password
   tasks:
-    - name: Make vars persistant
-      set_fact:
-        aws_region: "{{aci_password}}"
+    - name: Saving passwords
+      copy:
+        content: '{{ aci_password|to_json }}'
+        dest: foo.json
+      delegate_to: localhost
   tasks:
     - name: Disabling SE linux
       command: setenforce 0
@@ -121,6 +123,8 @@
 - name: CLUSTER INIT
   hosts: kb-controller
   tasks:
+    - include_vars:
+        file: foo.json
     - name: Download acc-provision
       get_url:
         url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
