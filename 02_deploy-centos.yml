@@ -3,10 +3,6 @@
   hosts: kb-controller
   gather_facts: no
   vars_prompt:
-    - name: "namespace"
-      prompt: "namespace"
-      default: "default"
-      private: no
     - name: "replicas"
       prompt: "replicas"
       private: no
@@ -18,6 +14,6 @@
     - name: Deploying
       command: "{{item}}"
       with_items:
-        - kubectl create ns {{namespace}}
-        - kubectl -n {{namespace}} apply -f /root/deploy-centos.yml
-        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-centos.yml
+#        - kubectl create ns {{namespace}}
+        - kubectl apply -f /root/deploy-centos.yml
+        - kubectl scale --replicas={{replicas}} -f /root/deploy-centos.yml
