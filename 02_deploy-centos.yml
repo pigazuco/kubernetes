@@ -20,5 +20,4 @@
       with_items:
         - kubectl create ns {{namespace}}
         - kubectl -n {{namespace}} apply -f /root/deploy-centos.yml
-        - kubectl expose deployment centos --type="LoadBalancer" -n {{namespace}}
         - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-centos.yml
