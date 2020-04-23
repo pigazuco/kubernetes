@@ -7,10 +7,6 @@
       private: yes
       register: aci_password
   tasks:
-    - name: Load variables
-      include_vars:
-        file: foo.json
-        name: aci_password
     - name: Download acc-provision
       get_url:
         url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
