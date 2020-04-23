@@ -12,7 +12,7 @@
       copy:
         content: '{{ aci_password|to_json }}'
         dest: foo.json
-      delegate_to: localhost
+      delegate_to: kb-controller
   tasks:
     - name: Disabling SE linux
       command: setenforce 0
@@ -63,6 +63,25 @@
       command: systemctl enable docker
     - name: start docker service
       command: systemctl start docker
+- name: ACI FABRIC Provision
+  hosts: kb-controller
+  tasks:
+    - name: Load variables
+      include_vars:
+        file: foo.json
+        name: aci_password
+    - name: Download acc-provision
+      get_url:
+        url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+        dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+    - name: Install Provisioning
+      command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+    - name: Copy aci-containers-config.yaml
+      copy:
+        src: /root/kubernetes/aci-containers-config.yaml
+        dest: /root/aci-containers-config.yaml
+    - name: Provision ACI infra
+      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p {{aci_password}}
 - name: DEPLOY KUBERNETES
   hosts: kb-all
   gather_facts: no
@@ -123,20 +142,6 @@
 - name: CLUSTER INIT
   hosts: kb-controller
   tasks:
-    - include_vars:
-        file: foo.json
-    - name: Download acc-provision
-      get_url:
-        url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-        dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-    - name: Install Provisioning
-      command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-    - name: Copy aci-containers-config.yaml
-      copy:
-        src: /root/kubernetes/aci-containers-config.yaml
-        dest: /root/aci-containers-config.yaml
-    - name: Provision ACI infra
-      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p {{aci_password}}
     - name: Kubernetes cluster initialization
       command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
 #      command: "kubeadm init --pod-network-cidr 1.2.192.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24"
