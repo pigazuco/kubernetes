@@ -2,6 +2,10 @@
 - name: DEPLOY DOCKER
   hosts: kb-all
   gather_facts: no
+  vars_prompt:
+    - name: "aci_password"
+      prompt: "Enter ACI password"
+      private: yes
   tasks:
     - name: Disabling SE linux
       command: setenforce 0
@@ -123,7 +127,7 @@
         src: /root/kubernetes/aci-containers-config.yaml
         dest: /root/aci-containers-config.yaml
     - name: Provision ACI infra
-      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p ijar2761
+      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p {{aci_password}}
     - name: Kubernetes cluster initialization
       command: "kubeadm init --pod-network-cidr=1.2.192.0/23 --apiserver-advertise-address=1.2.128.11"
 #      command: "kubeadm init --pod-network-cidr 1.2.192.0/23 --apiserver-advertise-address 1.2.128.11 --service-cidr 1.2.131.0/24"
