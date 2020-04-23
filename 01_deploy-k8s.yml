@@ -10,7 +10,7 @@
   tasks:
     - name: Saving passwords
       copy:
-        content: '{{ aci_password|to_json }}'
+        content: '{{aci_password}}'
         dest: foo.json
       delegate_to: kb-controller
   tasks:
