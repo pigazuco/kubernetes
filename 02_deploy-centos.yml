@@ -1,0 +1,24 @@
+---
+- name: DEPLOY CENTOS
+  hosts: kb-controller
+  gather_facts: no
+  vars_prompt:
+    - name: "namespace"
+      prompt: "namespace"
+      default: "default"
+      private: no
+    - name: "replicas"
+      prompt: "replicas"
+      private: no
+  tasks:
+    - name: Copy yaml
+      copy:
+        src: /root/kubernetes/deploy-centos.yml
+        dest: /root/deploy-centos.yml
+    - name: Deploying
+      command: "{{item}}"
+      with_items:
+        - kubectl create ns {{namespace}}
+        - kubectl -n {{namespace}} apply -f /root/deploy-centos.yml
+        - kubectl expose deployment centos --type="LoadBalancer" -n {{namespace}}
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-centos.yml
