@@ -1,18 +1,31 @@
 ---
-- name: DEPLOY DOCKER
-  hosts: kb-all
-  gather_facts: no
+- name: ACI FABRIC Provision
+  hosts: kb-controller
   vars_prompt:
     - name: "aci_password"
       prompt: "Enter ACI password"
       private: yes
       register: aci_password
   tasks:
-    - name: Saving passwords
+    - name: Load variables
+      include_vars:
+        file: foo.json
+        name: aci_password
+    - name: Download acc-provision
+      get_url:
+        url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+        dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+    - name: Install Provisioning
+      command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
+    - name: Copy aci-containers-config.yaml
       copy:
-        content: '{{aci_password}}'
-        dest: foo.json
-      delegate_to: kb-controller
+        src: /root/kubernetes/aci-containers-config.yaml
+        dest: /root/aci-containers-config.yaml
+    - name: Provision ACI infra
+      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p {{aci_password}}
+- name: DEPLOY DOCKER
+  hosts: kb-all
+  gather_facts: no
   tasks:
     - name: Disabling SE linux
       command: setenforce 0
@@ -63,25 +76,7 @@
       command: systemctl enable docker
     - name: start docker service
       command: systemctl start docker
-- name: ACI FABRIC Provision
-  hosts: kb-controller
-  tasks:
-    - name: Load variables
-      include_vars:
-        file: foo.json
-        name: aci_password
-    - name: Download acc-provision
-      get_url:
-        url: http://registry.mad.lab/kube/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-        dest: /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-    - name: Install Provisioning
-      command: yum -y localinstall /root/acc-provision-4.2.2.1-23.el7.x86_64.rpm
-    - name: Copy aci-containers-config.yaml
-      copy:
-        src: /root/kubernetes/aci-containers-config.yaml
-        dest: /root/aci-containers-config.yaml
-    - name: Provision ACI infra
-      command: acc-provision -c /root/aci-containers-config.yaml -o aci-containers.yaml -f kubernetes-1.15 -a -u aibarrio -p {{aci_password}}
+
 - name: DEPLOY KUBERNETES
   hosts: kb-all
   gather_facts: no
