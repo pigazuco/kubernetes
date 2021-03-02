@@ -1,5 +1,5 @@
 ---
-- name: Rollback_
+- name: Rollback
   hosts: srv1.mad.lab
   gather_facts: no
   vars_prompt:
