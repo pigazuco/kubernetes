@@ -33,7 +33,7 @@
       yum:
         state: present
         name:
-          - docker-ce-18.06.2.ce
+          - docker-ce
     - name: Create /etc/docker folder
       file:
         path: /etc/docker
