@@ -29,7 +29,7 @@
       command: echo net.ipv4.igmp_max_memberships = 200 > /etc/sysctl.d/99-sysctl.conf
     - name: Add docker repo
       command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    - name: Install docker 18.06.2.ce
+    - name: Install docker
       yum:
         state: present
         name:
