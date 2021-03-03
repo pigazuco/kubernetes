@@ -4,7 +4,7 @@
   gather_facts: no
   vars_prompt:
     - name: "rollback"
-      prompt: "01-empty, 02-cisco-cnik"
+      prompt: "01-empty, 02-cisco-cnik, 03-before-init (1.20)"
       default: "02"
       private: no
   tasks:
