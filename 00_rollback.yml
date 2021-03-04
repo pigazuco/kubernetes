@@ -19,3 +19,5 @@
         - virsh start kb-node2
         - virsh start kb-node3
         - virsh start kb-node4
+    - pause:
+      seconds: 30
