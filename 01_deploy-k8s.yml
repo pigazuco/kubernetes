@@ -3,6 +3,8 @@
   hosts: kb-all
   gather_facts: no
   tasks:
+    - pause:
+      minutes: 1
     - name: Disabling SE linux
       command: setenforce 0
     - name: Disabling SE linux permanent
