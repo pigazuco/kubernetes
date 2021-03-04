@@ -15,3 +15,6 @@ kb-node1.mad.lab
 kb-node2.mad.lab
 kb-node3.mad.lab
 kb-node4.mad.lab
+
+[srv1]
+srv1.mad.lab
