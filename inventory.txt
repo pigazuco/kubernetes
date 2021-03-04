@@ -1,16 +1,17 @@
 localhost
 
-[all-kube]
-kb-master.mad.lab
+
+[kb-all]
 kb-node1.mad.lab
 kb-node2.mad.lab
+kb-node3.mad.lab
+kb-node4.mad.lab
 
-[controller]
-kb-master.mad.lab
+[kb-controller]
+kb-node1.mad.lab
 
-[nodes]
+[kb-nodes]
 kb-node1.mad.lab
 kb-node2.mad.lab
-
-[srv1]
-srv1.mad.lab
+kb-node3.mad.lab
+kb-node4.mad.lab
