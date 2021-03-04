@@ -14,7 +14,7 @@
   tasks:
     - name: Copy deployment-nginx.yaml
       copy:
-        src: /root/kubernetes/deployment-nginx.yaml
+        src: /root/kubernetes/deploy-nginx.yml
         dest: /root/deployment-nginx.yaml
     - name: Deploy project
       command: "{{item}}"
