@@ -7,7 +7,7 @@
       minutes: 5
     - name: Copy aci-containers.yaml
       copy:
-        src: aci-containers.yaml
+        src: /var/lib/jenkins/workspace/deploy/02_deploy_cni/aci-containers.yaml
         dest: /root/aci-containers.yaml
     - name: Applying Cisco CNI
       command: kubectl apply -f aci-containers.yaml
