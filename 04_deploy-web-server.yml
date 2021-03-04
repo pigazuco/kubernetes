@@ -15,11 +15,11 @@
     - name: Copy deployment-nginx.yaml
       copy:
         src: /$WORKSPACE/kubernetes/deploy-nginx.yml
-        dest: /root/deployment-nginx.yaml
+        dest: /root/deploy-nginx.yml
     - name: Deploy project
       command: "{{item}}"
       with_items:
         - kubectl create ns {{namespace}}
-        - kubectl -n {{namespace}} apply -f /root/deployment-nginx.yaml
+        - kubectl -n {{namespace}} apply -f /root/deploy-nginx.yml
         - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
-        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/deployment-nginx.yaml
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /tmp/deploy-nginx.yml

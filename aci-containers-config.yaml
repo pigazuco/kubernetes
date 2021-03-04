@@ -1,3 +1,6 @@
+#
+# Configuration for ACI Fabric
+#
 aci_config:
   system_id: AITOR             # Every opflex cluster must have a distinct ID
   #apic-refreshtime: 1200       # Subscrption refresh-interval in seconds; Max=43200
@@ -15,16 +18,22 @@ aci_config:
     # type: vmware              # Specify the VMM vendor (supported: vmware)
     # name: myvmware            # Specify the name of the VMM domain
 
+    # Mandatory field for Openshift on ESX flavor
+    # Loadbalancer IP used to create duplicate service file for
+    # router-default service in Openshift on ESX case. This has to be
+    # the same LB IP used during installation
+    # installer_provisioned_lb_ip: 192.168.18.201
+
   # The following resources must already exist on the APIC.
   # They are used, but not created, by the provisioning tool.
-  aep: aep_aibarrio          # The AEP for ports/VPCs used by this cluster
+  aep: aep_aibarrio             # The AEP for ports/VPCs used by this cluster
   vrf:                          # This VRF used to create all kubernetes EPs
     name: KUBE
     tenant: AITOR              # This can be system-id or common
   l3out:
-    name: L3OUT-KUBE          # Used to provision external IPs
+    name: L3OUT-KUBE           # Used to provision external IPs
     external_networks:
-    - KBNT_EXTEPG           # Used for external contracts
+    - KBNT_EXTEPG             # Used for external contracts
   #custom_epgs:                 # List of additional endpoint-group names
   #  - custom_group1            # to configure for use with annotations
   #  - custom_group2
@@ -39,7 +48,7 @@ aci_config:
 #
 net_config:
   node_subnet: 1.2.128.1/24      # Subnet to use for nodes
-  pod_subnet: 1.2.192.1/23    # Subnet to use for Kubernetes
+  pod_subnet: 1.2.192.1/23       # Subnet to use for Kubernetes
                                 #   Pods/CloudFoundry containers
   #vip_subnet: 10.3.0.1/16      # Subnet to use for virtual IPs
                                 #   (CloudFoundry only)
@@ -52,7 +61,7 @@ net_config:
   infra_vlan: 3967              # The VLAN used by ACI infra
   #interface_mtu: 1600          # min = 1280 for ipv6, max = 8900 for VXLAN
   #service_monitor_interval: 5  # IPSLA interval probe time for PBR tracking
-                                # default is 0, set to > 0 to enable, max: 65535
+                                # default is 5, set to 0 to disable, max: 65535
   #pbr_tracking_non_snat: true  # Default is false, set to true for IPSLA to
                                 # be effective with non-snat services
 
@@ -64,11 +73,16 @@ registry:
   image_prefix: noiro                   # e.g: registry.example.com/noiro
   # image_pull_secret: secret_name      # (if needed)
 
-kube_config:
+#kube_config:
   # ovs_memory_limit: "20Gi"            # override if needed, default is "1Gi"
   # reboot_opflex_with_ovs: "false"     # override if needed, default is "true"
-  snat_operator:
-    port_range:
-      start: 6000
-      end: 62000
-      ports_per_node: 500
+
+#istio_config:
+  # install_istio: False         # default is True
+  # install_profile: "default"   # override if needed, default is "demo"
+
+#drop_log_config:
+  # enable: True         # default is False
+
+#multus:
+  # disable: False       # default is True
