@@ -1,0 +1,14 @@
+---
+- name: DEPLOY CISCO CNI
+  hosts: kb-controller
+  gather_facts: no
+  tasks:
+    - pause:
+      minutes: 5
+    - name: Copy aci-containers.yaml
+      copy:
+        src: aci-containers.yaml
+        dest: /root/aci-containers.yaml
+    - name: Applying Cisco CNI
+      command: kubectl apply -f aci-containers.yaml
+
