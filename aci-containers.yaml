@@ -174,7 +174,7 @@ spec:
               properties:
                 matchLabels:
                   type: object
-                  description:
+                  description: "" 
             ingress:
               properties:
                 policing_rate:
@@ -284,7 +284,7 @@ spec:
               properties:
                 matchLabels:
                   type: object
-                  description:
+                  description: ""
             source:
               type: object
               properties:
