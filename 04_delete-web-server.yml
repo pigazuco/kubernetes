@@ -5,6 +5,7 @@
   vars_prompt:
     - name: "namespace"
       prompt: "namespace"
+      default: "my-namespace"
       private: no
   tasks:
     - name: Deploy project
