@@ -1,3 +1,10 @@
+
+kubectl run --generator=run-pod/v1 --image=alpine:3.5 -it alpine-shell -- /bin/sh
+kubectl attach alpine-shell -c alpine-shell -i -t
+
+kubectl exec --stdin --tty alpine-5d7d855b69-zlvln -- /bin/sh
+
+
 kubectl apply -f ./my-manifest.yaml            # create resource(s)
 kubectl apply -f ./my1.yaml -f ./my2.yaml      # create from multiple files
 kubectl apply -f ./dir                         # create resource(s) in all manifest files in dir

@@ -1,19 +1,20 @@
 apiVersion: apps/v1 # Usa apps/v1beta2 para versiones anteriores a 1.9.0
 kind: Deployment
 metadata:
-  name: web-server
+  name: alpine
 spec:
   selector:
     matchLabels:
-      app: web-server
+      app: alpine
   replicas: 1
   template:
     metadata:
       labels:
-        app: web-server
+        app: alpine
     spec:
       containers:
-      - name: web-server
-        image: nginxdemos/hello
+      - name: alpine-bash
+        image: alpine:3.5
+        command: ["/bin/ping","10.10.10.47"]
         ports:
-        - containerPort: 80
+        - containerPort: 22
