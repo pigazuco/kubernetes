@@ -2,15 +2,6 @@
 - name: DEPLOY WEB-SERVER
   hosts: kb-controller
   gather_facts: no
-  vars_prompt:
-    - name: "namespace"
-      prompt: "namespace"
-      default: "my-namespace"
-      private: no
-    - name: "replicas"
-      prompt: "replicas"
-      default: "2"
-      private: no
   tasks:
     - name: Copy deployment-nginx.yaml
       copy:
