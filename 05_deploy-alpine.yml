@@ -12,4 +12,4 @@
       with_items:
         - kubectl create ns {{namespace}}
         - kubectl -n {{namespace}} apply -f /root/deploy-alpine.yml
-        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-nginx.yml
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-alpine.yml
