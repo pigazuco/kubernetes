@@ -1,0 +1,15 @@
+---
+- name: DEPLOY ALPINE
+  hosts: kb-controller
+  gather_facts: no
+  tasks:
+    - name: Copy deploy-alpine.yml
+      copy:
+        src: /var/lib/jenkins/workspace/deploy-kubernetes/deploy-alpine.yml
+        dest: /root/deploy-alpine.yml
+    - name: Deploy project
+      command: "{{item}}"
+      with_items:
+        - kubectl create ns {{namespace}}
+        - kubectl -n {{namespace}} apply -f /root/deploy-alpine.yml
+        - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-nginx.yml

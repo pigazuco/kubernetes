@@ -1,0 +1,10 @@
+---
+- name: DEPLOY WEB-SERVER
+  hosts: kb-controller
+  gather_facts: no
+  tasks:
+    - name: Deploy project
+      command: "{{item}}"
+      with_items:
+        - kubectl delete deployment alpine -n {{namespace}}
+        - kubectl delete ns {{namespace}}
