@@ -91,10 +91,11 @@
     - name: Install Kubernetes Packages
       yum:
         state: present
+        update_cache=yes
         name:
-          - kubelet
-          - kubeadm
-          - kubectl
+          - kubelet-20.10.5-3
+          - kubeadm-20.10.5-3
+          - kubectl20.10.5-3
     - name: systemctl enable kubelet
       command: systemctl enable --now kubelet
     - name: systemctl start kubelet
