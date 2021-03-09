@@ -14,3 +14,4 @@
         - kubectl -n {{namespace}} apply -f /root/deploy-nginx.yml
         - kubectl expose deployment web-server --type="LoadBalancer" -n {{namespace}}
         - kubectl scale --replicas={{replicas}} -n {{namespace}} -f /root/deploy-nginx.yml
+        - kubectl get services -n {{namespace}}
