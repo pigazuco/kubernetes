@@ -93,9 +93,9 @@
         state: present
         update_cache=yes
         name:
-          - kubelet-20.10.5-3
-          - kubeadm-20.10.5-3
-          - kubectl20.10.5-3
+          - kubelet-1.20.4
+          - kubeadm-1.20.4
+          - kubectl-1.20.4
     - name: systemctl enable kubelet
       command: systemctl enable --now kubelet
     - name: systemctl start kubelet
