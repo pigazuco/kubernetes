@@ -89,7 +89,12 @@
         state: present
         reload: yes
     - name: Install Kubernetes Packages
-      shell: "yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes"
+      yum:
+        state: present
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
     - name: systemctl enable kubelet
       command: systemctl enable --now kubelet
     - name: systemctl start kubelet
